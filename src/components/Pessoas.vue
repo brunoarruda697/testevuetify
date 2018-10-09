@@ -1,38 +1,63 @@
-<template lang="html">
-  <v-container grid-list-md>
-    <v-layout row wrap>
-      <v-flex xs4 v-for="(pessoa, index) in pessoas" :key="pessoa">
-        <v-card>
-          <v-card-media :src="pessoa.avatar" height="200px">
-          </v-card-media>
-          <v-card-title primary-title>
-            <div>
-              <h3 class="headline mb-0">{{ pessoa.name }}</h3>
-              <div>{{ pessoa.occupation }}</div>
-            </div>
-          </v-card-title>
-
-          <v-card-actions>
-            <v-btn flat color="orange">Share</v-btn>
-            <v-btn flat color="orange">Explore</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-flex>
-    </v-layout>
-  </v-container>
+<template>
+  <v-card>
+    <v-card-title>
+      <h1 class="px-5 ">Lista</h1>
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="search"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
+    <v-data-table
+      :headers="headers"
+      :items="pessoas"
+      :search="search"
+    >
+      <template slot="items" slot-scope="{ item }">
+        <td>{{ item.name }}</td>
+        <td class="text-xs-right">{{ item.phone }}</td>
+        <td class="text-xs-right">{{ item.occupation }}</td>
+      </template>
+      <v-alert slot="no-results" :value="true" color="error" icon="warning">
+        Your search for "{{ search }}" found no results.
+      </v-alert>
+    </v-data-table>
+  </v-card>
 </template>
 
 <script>
 import API from '@/lib/API';
 
 export default {
+  name: 'pessoas',
   data() {
     return {
+      search: '',
+      headers: [
+        {
+          text: 'Nome completo',
+          align: 'left',
+          sortable: false,
+          value: 'name',
+        },
+        {
+          text: 'Telefone',
+          align: 'center',
+          sortable: false,
+          value: 'phone',
+        },
+        { text: 'Profissão',
+          align: 'right',
+          sortable: false,
+          value: 'occupation',
+        },
+      ],
       pessoas: [],
-      products: [],
     };
   },
-
   created() {
     const { load } = this;
     load();
@@ -43,15 +68,26 @@ export default {
         .getPessoas()
         .then(({ data }) => {
           this.pessoas = data;
-        })
-        .catch(({ err }) => {
-          console.log(err);
         });
     },
   },
 };
 </script>
 
-<style lang="css">
-
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+h1, h2 {
+  font-weight: normal;
+}
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+li {
+  display: inline-block;
+  margin: 0 10px;
+}
+a {
+  color: #42b983;
+}
 </style>
