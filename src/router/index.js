@@ -1,16 +1,16 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Pessoas from '@/components/Pessoas';
+import People from '@/components/People';
 
 Vue.use(Router);
-Vue.use(Pessoas);
+Vue.use(People);
 
 export default new Router({
   routes: [
     {
-      path: '/pessoas',
-      name: 'Pessoas',
-      component: Pessoas,
+      path: '/people',
+      name: 'people',
+      component: People,
     },
   ],
 });
